@@ -1,5 +1,6 @@
-var createServer = require("http").createServer;
+var createServer = require("https").createServer;
 var readFile = require("fs").readFile;
+var readFileSync = require("fs").readFileSync;
 var sys = require("sys");
 var url = require("url");
 DEBUG = false;
@@ -7,6 +8,11 @@ DEBUG = false;
 var fu = exports;
 
 var NOT_FOUND = "Not Found\n";
+
+var tls = {
+	key: readFileSync('privatekey.pem'),
+	cert: readFileSync('certificate.pem')
+};
 
 function notFound(req, res) {
   res.writeHead(404, { "Content-Type": "text/plain"
@@ -20,7 +26,7 @@ var getMap = {};
 fu.get = function (path, handler) {
   getMap[path] = handler;
 };
-var server = createServer(function (req, res) {
+var server = createServer(tls, function (req, res) {
   if (req.method === "GET" || req.method === "HEAD") {
     var handler = getMap[url.parse(req.url).pathname] || notFound;
 
