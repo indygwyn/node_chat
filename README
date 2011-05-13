@@ -2,3 +2,10 @@ Demo for node.js http://tinyclouds.org/node
 
 to run
 $ /usr/local/bin/node server.js
+
+this version has been modified to run with HTTPS, you will need to create an SSL key and certificate
+
+$ openssl genrsa -out privatekey.pem 1024
+$ openssl req -new -key privatekey.pem -out certrequest.csr
+$ openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+
